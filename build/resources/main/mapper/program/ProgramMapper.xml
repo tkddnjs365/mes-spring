@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mes.mes_boot.system.program.mapper.ProgramMapper">
+    <select id="getPrograms" resultType="com.mes.mes_boot.system.program.dto.ProgramDto">
+        SELECT id
+             , name
+             , description As description
+             , path        As path
+             , created_at  As createdAt
+             , updated_at  As updatedAt
+        FROM programs a
+    </select>
+
+    <insert id="createProgram" parameterType="map">
+        INSERT INTO programs (created_at, updated_at, name, description, path)
+        SELECT NOW()
+             , NOW()
+             , #{progName}
+             , #{description}
+             , #{path}
+    </insert>
+
+    <delete id="deleteProgram" parameterType="map">
+        DELETE
+        FROM programs
+        WHERE id = #{programId}
+    </delete>
+
+    <update id="updateProgram" parameterType="map">
+        UPDATE FROM programs
+        SET name        = #{progName}
+          , description = #{description}
+          , path        = #{path}
+        WHERE id = #{programId}
+    </update>
+
+    <select id="getCompanyPrograms" resultType="com.mes.mes_boot.system.program.dto.ProgCompDto">
+        SELECT a.id         AS id
+             , c.code       AS companyCode
+             , a.prog_idx   AS programId
+             , a.created_at AS createdAt
+             , a.updated_at AS updatedAt
+        FROM prog_link_company a
+                 JOIN programs b ON a.prog_idx = b.id
+                 JOIN companies c ON a.company_idx = c.id
+        WHERE 1 = 1
+          AND c.code = #{companyCode}
+    </select>
+
+    <insert id="connectCompanyProgram" parameterType="map">
+        INSERT INTO prog_link_company (created_at, updated_at, company_idx, prog_idx)
+        SELECT NOW()
+             , NOW()
+             , (SELECT id FROM companies WHERE code = #{companyCode})
+             , #{programId}
+    </insert>
+
+    <delete id="disconnectCompanyProgram" parameterType="map">
+        DELETE
+        FROM prog_link_company
+        WHERE company_idx = (SELECT id FROM companies WHERE code = #{companyCode})
+          AND prog_idx = #{programId}
+    </delete>
+
+    <select id="getProgMenuCompany" resultType="com.mes.mes_boot.system.program.dto.ProgMenuDto">
+        SELECT a.prog_idx  As progIdx
+             , a.prog_name As progName
+             , d.name      AS menuName
+        FROM v_prog_company a
+                 JOIN menu_link_prog b ON a.prog_idx = b.prog_idx
+                 JOIN menus c ON b.menu_idx = c.id
+                 LEFT JOIN menus d ON c.parent_id = d.id
+        WHERE A.company_idx = #{company_idx}
+    </select>
+</mapper>

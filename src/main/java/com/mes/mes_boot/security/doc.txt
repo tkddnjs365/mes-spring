@@ -1,0 +1,24 @@
+🔄 동작 과정 설명
+
+1. 애플리케이션 시작 시
+Spring Boot 시작
+    → @Configuration 클래스들을 찾음
+    → SecurityConfig 발견
+    → @Bean 메서드들 실행
+    → filterChain()과 corsConfigurationSource() 실행
+    → 반환된 객체들을 Spring 컨테이너에 저장
+
+2. 클라이언트 요청이 들어올 때
+브라우저에서 POST /login/login 요청
+    → Spring Security Filter가 먼저 가로챔
+    → CORS 설정 확인 (출처가 localhost:7010인가?)
+    → 인증 필요한지 확인 (.anyRequest().permitAll()이므로 통과)
+    → Controller로 요청 전달
+    → UserController.UserLogin() 실행
+
+3. CORS가 실제로 작동하는 순간
+프론트엔드(localhost:7010)에서 Ajax 요청
+    → 브라우저가 "다른 도메인이네?" 감지
+    → OPTIONS 요청을 먼저 보냄 (Preflight)
+    → 서버가 "허용된 도메인이야" 응답
+    → 실제 POST 요청 실행

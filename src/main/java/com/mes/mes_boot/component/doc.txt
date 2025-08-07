@@ -1,0 +1,25 @@
+🔄 동작 과정 설명
+
+1. Spring Boot 애플리케이션 시작 과정
+    → Spring Boot 애플리케이션 시작
+    → 의존성 주입, Bean 등록 등 초기화 작업 진행
+    → 웹 서버(Tomcat) 시작
+    → 모든 준비가 완료되면 ApplicationReadyEvent 발생 ⭐
+    → SwaggerAutoOpenListener.onApplicationEvent() 자동 호출
+    → 조건 확인 후 브라우저에서 Swagger UI 자동 실행
+
+2. 실제 실행 시나리오
+개발 환경 (Windows):
+애플리케이션 완전 시작
+    → onApplicationEvent() 호출
+    → os = "windows 10"
+    → DOCKER_ENV 환경변수 없음
+    → Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler http://localhost:7010/swagger-ui/index.html")
+    → 기본 브라우저에서 Swagger UI 자동으로 열림 🌐
+
+3. 도커 환경:
+애플리케이션 완전 시작
+    → onApplicationEvent() 호출
+    → DOCKER_ENV 환경변수 존재
+    → return으로 메서드 종료
+    → 브라우저 실행 안함 (도커 컨테이너 안에는 브라우저가 없으니까)

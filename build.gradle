@@ -1,0 +1,54 @@
+plugins {
+    id 'java'  // 자바 프로젝트임을 명시
+    id 'org.springframework.boot' version '3.5.4' // 스프링 부트 플러그인: 실행, 패키징, 내장 톰캣 등 지원
+    id 'io.spring.dependency-management' version '1.1.7'  // 스프링 의존성 버전 자동 관리
+}
+
+group = 'com.mes'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17) // 자바 17 버전 사용 (JDK 17 필요)
+    }
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor // annotationProcessor 설정도 compileOnly에 포함 (롬복 등)
+    }
+}
+
+repositories {
+    mavenCentral() // 메이븐 중앙 저장소에서 라이브러리 다운로드
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+
+    // MyBatis
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.5'
+
+    // Swagger
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.8'
+
+    // Lombok (코드 자동 생성 라이브러리)
+    compileOnly 'org.projectlombok:lombok'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    // .env 사용
+    implementation 'me.paulschwarz:spring-dotenv:4.0.0'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
