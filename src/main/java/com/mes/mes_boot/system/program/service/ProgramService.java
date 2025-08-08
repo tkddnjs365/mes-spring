@@ -123,4 +123,77 @@ public class ProgramService {
             return null;
         }
     }
+
+    /* 메뉴 목록 조회 */
+    public List<MenuDto> getMenuCategories() {
+        try {
+            return programMapper.getMenuCategories();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    /* 메뉴 생성 */
+    public boolean createMenuCategory(RequestMenuDto request) {
+        try {
+            Map<String, Object> paramMap = new HashMap<>();
+            paramMap.put("name", request.getName());
+            paramMap.put("description", request.getDescription());
+            paramMap.put("sortOrder", request.getSortOrder());
+            paramMap.put("parentId", request.getParentId());
+            paramMap.put("saveType", request.getSaveType());
+
+            int result = programMapper.createMenuCategory(paramMap);
+
+            // 대메뉴일 경우 parent_id 업데이트
+            if (request.getSaveType().equals("main") && result > 0) {
+                programMapper.updateMenuParentId(paramMap);
+            }
+
+            return result > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /* 중메뉴 프로그램 연결 조회 */
+    public List<MenuProgDto> getMenuLinkPrograms(String menuId) {
+        try {
+            paramMap = new HashMap<>();
+            paramMap.put("menuId", menuId);
+
+            return programMapper.getMenuLinkPrograms(paramMap);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    /* 중메뉴 프로그램 연결 */
+    public boolean connectMenuProgram(RequestMenuProgDto request) {
+        try {
+            paramMap = new HashMap<>();
+            paramMap.put("menuId", request.getMenuId());
+            paramMap.put("programId", request.getProgramId());
+
+            int result = programMapper.connectMenuProgram(paramMap);
+            return result > 0;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    /* 중메뉴 프로그램 연결 해제 */
+    public boolean disconnectMenuProgram(RequestMenuProgDto request) {
+        try {
+            paramMap = new HashMap<>();
+            paramMap.put("menuId", request.getMenuId());
+            paramMap.put("programId", request.getProgramId());
+
+            int result = programMapper.disconnectMenuProgram(paramMap);
+            return result > 0;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }

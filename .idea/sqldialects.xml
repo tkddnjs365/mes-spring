@@ -2,5 +2,7 @@
 <project version="4">
   <component name="SqlDialectMappings">
     <file url="file://$PROJECT_DIR$/src/main/resources/mapper/auth/User/UserMapper.xml" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/mapper/program/ProgramMapper.xml" dialect="GenericSQL" />
+    <file url="PROJECT" dialect="MariaDB" />
   </component>
 </project>

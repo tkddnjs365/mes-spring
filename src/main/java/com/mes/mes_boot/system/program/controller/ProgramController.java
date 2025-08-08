@@ -225,4 +225,133 @@ public class ProgramController {
 
         return ResponseEntity.ok(response);
     }
+
+    /* 메뉴 조회 */
+    @GetMapping("/menuCategory")
+    @Operation(summary = "메뉴 목록 조회", description = "메뉴 목록 조회")
+    public ResponseEntity<ResponseMenuDto> getMenuCategories() {
+        List<MenuDto> re_dto = programService.getMenuCategories();
+
+        if (re_dto == null) {
+            return ResponseEntity.status(500).body(
+                    ResponseMenuDto.builder()
+                            .success(false)
+                            .message("서버 오류")
+                            .menus(null)
+                            .build()
+            );
+        }
+
+        ResponseMenuDto response = ResponseMenuDto.builder()
+                .success(true)
+                .message("성공")
+                .menus(re_dto)
+                .build();
+
+        return ResponseEntity.ok(response);
+    }
+
+    /* 메뉴 생성 */
+    @PostMapping("/menuCreate")
+    @Operation(summary = "메뉴 생성", description = "메뉴 생성")
+    public ResponseEntity<Map<String, Object>> createMenuCategory(@RequestBody RequestMenuDto request) {
+        try {
+            boolean result = programService.createMenuCategory(request);
+
+            Map<String, Object> response = new HashMap<>();
+            if (result) {
+                response.put("success", true);
+                response.put("message", "성공");
+                return ResponseEntity.ok(response);
+            } else {
+                response.put("success", false);
+                response.put("message", "실패");
+                return ResponseEntity.badRequest().body(response);
+            }
+
+        } catch (Exception e) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("success", false);
+            errorResponse.put("message", "서버 오류가 발생했습니다.");
+            return ResponseEntity.status(500).body(errorResponse);
+        }
+    }
+
+    /* 중메뉴 프로그램 연결 조회 */
+    @GetMapping("/menuProg/{menuId}")
+    @Operation(summary = "중메뉴 프로그램 연결 조회", description = "중메뉴 프로그램 연결 조회")
+    public ResponseEntity<ResponseMenuProgDto> getMenuLinkPrograms(@PathVariable String menuId) {
+        List<MenuProgDto> re_dto = programService.getMenuLinkPrograms(menuId);
+
+        if (re_dto == null) {
+            return ResponseEntity.status(500).body(
+                    ResponseMenuProgDto.builder()
+                            .success(false)
+                            .message("서버 오류")
+                            .programs(null)
+                            .build()
+            );
+        }
+
+        ResponseMenuProgDto response = ResponseMenuProgDto.builder()
+                .success(true)
+                .message("성공")
+                .programs(re_dto)
+                .build();
+
+        return ResponseEntity.ok(response);
+    }
+
+    /* 중메뉴-프로그램 연결 */
+    @PostMapping("/menuProgConnect")
+    @Operation(summary = "중메뉴-프로그램 연결", description = "중메뉴-프로그램 연결 합니다")
+    public ResponseEntity<Map<String, Object>> connectMenuProgram(@RequestBody RequestMenuProgDto request) {
+        try {
+            boolean result = programService.connectMenuProgram(request);
+
+            Map<String, Object> response = new HashMap<>();
+            if (result) {
+                response.put("success", true);
+                response.put("message", "성공");
+                return ResponseEntity.ok(response);
+            } else {
+                response.put("success", false);
+                response.put("message", "실패");
+                return ResponseEntity.badRequest().body(response);
+            }
+
+        } catch (Exception e) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("success", false);
+            errorResponse.put("message", "서버 오류가 발생했습니다.");
+            return ResponseEntity.status(500).body(errorResponse);
+        }
+    }
+
+    /* 중메뉴-프로그램 연결 해제 */
+    @DeleteMapping("/menuProgDisConnect")
+    @Operation(summary = "중메뉴-프로그램 연결 해제", description = "중메뉴-프로그램 해제 합니다")
+    public ResponseEntity<Map<String, Object>> disconnectMenuProgram(@RequestBody RequestMenuProgDto request) {
+        try {
+            boolean result = programService.disconnectMenuProgram(request);
+
+            Map<String, Object> response = new HashMap<>();
+            if (result) {
+                response.put("success", true);
+                response.put("message", "성공");
+                return ResponseEntity.ok(response);
+            } else {
+                response.put("success", false);
+                response.put("message", "실패");
+                return ResponseEntity.badRequest().body(response);
+            }
+
+        } catch (Exception e) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("success", false);
+            errorResponse.put("message", "서버 오류가 발생했습니다.");
+            return ResponseEntity.status(500).body(errorResponse);
+        }
+    }
+
 }

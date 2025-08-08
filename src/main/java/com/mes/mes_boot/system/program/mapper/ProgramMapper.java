@@ -1,10 +1,9 @@
 package com.mes.mes_boot.system.program.mapper;
 
-import com.mes.mes_boot.system.program.dto.ProgCompDto;
-import com.mes.mes_boot.system.program.dto.ProgMenuDto;
-import com.mes.mes_boot.system.program.dto.ProgramDto;
+import com.mes.mes_boot.system.program.dto.*;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -34,4 +33,20 @@ public interface ProgramMapper {
 
     /* 회사별 프로그램 목록 */
     List<ProgMenuDto> getProgMenuCompany(Map<String, Object> paramMap);
+
+    /* 메뉴 목록 조회 */
+    List<MenuDto> getMenuCategories();
+
+    /* 메뉴 생성 */
+    int createMenuCategory(Map<String, Object> paramMap);
+    int updateMenuParentId(Map<String, Object> paramMap);
+
+    /* 중메뉴 프로그램 연결 조회 */
+    List<MenuProgDto> getMenuLinkPrograms(Map<String, Object> paramMap);
+
+    /* 중메뉴 프로그램 연결 */
+    int connectMenuProgram(Map<String, Object> paramMap);
+
+    /* 중메뉴 프로그램 연결 해제 */
+    int disconnectMenuProgram(Map<String, Object> paramMap);
 }

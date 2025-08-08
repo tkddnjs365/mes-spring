@@ -28,7 +28,7 @@
     </delete>
 
     <update id="updateProgram" parameterType="map">
-        UPDATE FROM programs
+        UPDATE programs
         SET name        = #{progName}
           , description = #{description}
           , path        = #{path}
@@ -73,4 +73,62 @@
                  LEFT JOIN menus d ON c.parent_id = d.id
         WHERE A.company_idx = #{company_idx}
     </select>
+
+    <select id="getMenuCategories" resultType="com.mes.mes_boot.system.program.dto.MenuDto">
+        SELECT a.id          AS id
+             , a.name        AS name
+             , a.description AS description
+             , a.sortorder   AS sortOrder
+             , a.created_at  AS createdAt
+             , a.updated_at  AS updatedAt
+             , a.parent_id   AS parentId
+        FROM menus a
+        WHERE 1 = 1
+    </select>
+
+    <!-- 메뉴 생성 -->
+    <insert id="createMenuCategory" parameterType="map" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO menus (name, description, sortorder, parent_id)
+        <choose>
+            <when test="saveType == 'main'">
+                VALUES (#{name}, #{description}, #{sortOrder}, NULL)
+            </when>
+            <otherwise>
+                VALUES (#{name}, #{description}, #{sortOrder}, #{parentId})
+            </otherwise>
+        </choose>
+    </insert>
+    <!-- 대메뉴일 경우 parent_id 업데이트 -->
+    <update id="updateMenuParentId" parameterType="map">
+        UPDATE menus
+        SET parent_id = id
+        WHERE parent_id IS null
+          AND name = #{name}
+          AND description = #{description}
+    </update>
+
+    <select id="getMenuLinkPrograms" resultType="com.mes.mes_boot.system.program.dto.MenuProgDto">
+        SELECT a.prog_idx  As id
+             , a.menu_idx As menuId
+             , a.prog_idx      AS programId
+             , a.created_at  As createdAt
+             , a.updated_at  As updatedAt
+        FROM menu_link_prog a
+        WHERE A.menu_idx = #{menuId}
+    </select>
+
+    <insert id="connectMenuProgram" parameterType="map">
+        INSERT INTO menu_link_prog (created_at, updated_at, menu_idx, prog_idx)
+        SELECT NOW()
+             , NOW()
+             , #{menuId}
+             , #{programId}
+    </insert>
+
+    <delete id="disconnectMenuProgram" parameterType="map">
+        DELETE
+        FROM menu_link_prog
+        WHERE menu_idx = #{menuId}
+          AND prog_idx = #{programId}
+    </delete>
 </mapper>
