@@ -41,7 +41,10 @@ public class SecurityConfig {
 
         // 어떤 도메인에서 요청을 보낼 수 있는지 설정
         // 현재는 http://localhost:3000 (프론트엔드 서버)만 허용
-        configuration.setAllowedOrigins(List.of("http://localhost:3000"));// 허용할 오리진 설정
+        configuration.setAllowedOrigins(List.of(
+                "http://localhost:3000",
+                "https://mes-web.vercel.app"
+        )); // 허용할 오리진 설정
 
         // 허용할 HTTP 메서드들 설정 (GET, POST, PUT, DELETE, OPTIONS)
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
