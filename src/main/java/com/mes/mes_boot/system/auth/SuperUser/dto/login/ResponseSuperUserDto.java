@@ -14,5 +14,5 @@ public class ResponseSuperUserDto {
     private String message;
     private String accessToken;
     private String refreshToken;
-    private SuperUserDto user;
+    private SuperUserDto User;
 }

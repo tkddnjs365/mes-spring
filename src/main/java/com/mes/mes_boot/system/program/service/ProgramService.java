@@ -196,4 +196,13 @@ public class ProgramService {
             return false;
         }
     }
+
+    /*  메뉴별 연결된 프로그램 전체 조회  */
+    public List<ProgMenuDto> getMenuProg() {
+        try {
+            return programMapper.getMenuProg();
+        } catch (Exception e) {
+            return null;
+        }
+    }
 }

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mes.mes_boot.system.master.item.mapper.ItemMapper">
+
+    <!-- 품목 조회 -->
+    <select id="getItemList" resultType="com.mes.mes_boot.system.master.item.dto.ItemDto">
+        SELECT A.company_idx As companyIdx
+        , A.item_idx As itemIdx
+        , A.item_cd As itemCd
+        , A.item_nm As itemNm
+        , A.item_spec As itemSpec
+        , B.value As itemType
+        , C.value As itemUnit
+        , A.use_yn As itemYn
+        , A.created_at As itemCreatedAt
+        , A.updated_at As itemUpdatedAt
+        , A.etc As itemEtc
+        , A.item_type As itemTypeIdx
+        , A.item_unit As itemUnitIdx
+        FROM item_mst A
+        JOIN common_code B ON A.company_idx = B.company_idx AND A.item_type = B.data_id
+        JOIN common_code C ON A.company_idx = C.company_idx AND A.item_unit = C.data_id
+        WHERE 1 = 1
+        <if test="companyIdx != null and companyIdx != ''">
+            AND A.company_idx = #{companyIdx}
+        </if>
+        <if test="item != null and item != ''">
+            AND (
+            A.item_nm LIKE CONCAT('%', #{item}, '%')
+            OR A.item_cd LIKE CONCAT('%', #{item}, '%')
+            )
+        </if>
+        <if test="itemIdx != null and itemIdx != ''">
+            AND A.item_idx = #{itemIdx}
+        </if>
+        <if test="itemType != null and itemType != ''">
+            AND A.item_type = #{itemType}
+        </if>
+        <if test="itemYn != null and itemYn != ''">
+            AND A.use_yn = #{itemYn}
+        </if>
+    </select>
+
+    <!-- 품목코드 조회 -->
+    <select id="getItemCd" resultType="string">
+        SELECT item_cd
+        FROM item_mst
+        WHERE item_idx = #{itemIdx}
+    </select>
+
+    <!-- 품목코드 중복 확인 -->
+    <select id="checkDuplicateItemCode" resultType="int">
+        SELECT COUNT(*)
+        FROM item_mst
+        WHERE company_idx = #{companyIdx}
+          AND item_cd = #{itemCd}
+    </select>
+
+    <!-- 다음 item_idx 조회 -->
+    <select id="getNextItemIdx" resultType="java.lang.Integer">
+        SELECT COALESCE(MAX(item_idx), 0) + 1
+        FROM item_mst
+    </select>
+
+    <!-- 품목 등록 -->
+    <insert id="insertItem">
+        INSERT INTO item_mst (item_idx, company_idx, item_cd, item_nm, item_spec, item_type, item_unit, use_yn,
+                              created_at, updated_at, etc)
+        SELECT #{itemIdx},
+               #{companyIdx},
+               #{itemCd},
+               #{itemNm},
+               #{itemSpec},
+               #{itemType},
+               #{itemUnit},
+               #{useYn},
+               NOW(),
+               NOW(),
+               #{etc}
+    </insert>
+
+    <!-- 품목 수정 -->
+    <update id="updateItem">
+        UPDATE item_mst
+        SET item_cd    = #{itemCd},
+            item_nm    = #{itemNm},
+            item_spec  = #{itemSpec},
+            item_type  = #{itemType},
+            item_unit  = #{itemUnit},
+            use_yn     = #{useYn},
+            etc        = #{etc},
+            updated_at = NOW()
+        WHERE item_idx = #{itemIdx}
+          AND company_idx = #{companyIdx}
+    </update>
+
+</mapper>

@@ -354,4 +354,28 @@ public class ProgramController {
         }
     }
 
+    /* 메뉴별 연결된 프로그램 전체 조회 */
+    @GetMapping("/getMenuProg")
+    @Operation(summary = "메뉴별 연결된 프로그램 전체 조회", description = "메뉴별 연결된 프로그램 전체 조회")
+    public ResponseEntity<ResponseProgMenuDto> getMenuProg() {
+        List<ProgMenuDto> re_dto = programService.getMenuProg();
+
+        if (re_dto == null) {
+            return ResponseEntity.status(500).body(
+                    ResponseProgMenuDto.builder()
+                            .success(false)
+                            .message("서버 오류")
+                            .programs(null)
+                            .build()
+            );
+        }
+
+        ResponseProgMenuDto response = ResponseProgMenuDto.builder()
+                .success(true)
+                .message("성공")
+                .programs(re_dto)
+                .build();
+
+        return ResponseEntity.ok(response);
+    }
 }

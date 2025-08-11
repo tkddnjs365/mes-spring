@@ -47,7 +47,7 @@ public class SuperUserController {
                 .message("로그인 성공") // 성공 메시지
                 .accessToken("") // JWT 토큰 생성 로직 추가 필요
                 .refreshToken("") // Refresh 토큰 생성 로직 추가 필요
-                .user(User) // 사용자 정보
+                .User(User) // 사용자 정보
                 .build();
 
         return ResponseEntity.ok(response); // HTTP 200 과 함께 응답 반환

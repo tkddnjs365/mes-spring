@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mes.mes_boot.system.common.mapper.CommonMapper">
+    <select id="getCommon" resultType="com.mes.mes_boot.system.common.dto.CommonDto">
+        SELECT A.data_id As dataId
+        , A.company_idx As companyIdx
+        , A.group_id As groupId
+        , A.key_id As keyId
+        , A.value As value
+        , A.description As description
+        , A.sort_order As sortOrder
+        , A.use_yn As useYn
+        FROM common_code A
+        WHERE 1 = 1
+        <if test="groupId != null and groupId != ''">
+            AND group_id = #{groupId}
+        </if>
+        <if test="useYn != null and useYn != ''">
+            AND use_yn = #{useYn}
+        </if>
+        <if test="companyIdx != null and companyIdx != ''">
+            AND company_idx = #{companyIdx}
+        </if>
+    </select>
+</mapper>

@@ -45,7 +45,7 @@
                  JOIN programs b ON a.prog_idx = b.id
                  JOIN companies c ON a.company_idx = c.id
         WHERE 1 = 1
-          AND c.code = #{companyCode}
+          AND (c.code = #{companyCode} OR c.id = #{companyCode})
     </select>
 
     <insert id="connectCompanyProgram" parameterType="map">
@@ -64,13 +64,14 @@
     </delete>
 
     <select id="getProgMenuCompany" resultType="com.mes.mes_boot.system.program.dto.ProgMenuDto">
-        SELECT a.prog_idx  As progIdx
-             , a.prog_name As progName
-             , d.name      AS menuName
-        FROM v_prog_company a
-                 JOIN menu_link_prog b ON a.prog_idx = b.prog_idx
-                 JOIN menus c ON b.menu_idx = c.id
-                 LEFT JOIN menus d ON c.parent_id = d.id
+        SELECT A.prog_idx As progIdx
+             , B.name     As progName
+             , E.name     As menuName
+        FROM prog_link_company A
+                 JOIN programs B ON A.prog_idx = B.id
+                 JOIN menu_link_prog C ON A.prog_idx = C.prog_idx
+                 JOIN menus D ON C.menu_idx = D.id
+                 LEFT JOIN menus E ON D.parent_id = E.id
         WHERE A.company_idx = #{company_idx}
     </select>
 
@@ -108,11 +109,11 @@
     </update>
 
     <select id="getMenuLinkPrograms" resultType="com.mes.mes_boot.system.program.dto.MenuProgDto">
-        SELECT a.prog_idx  As id
-             , a.menu_idx As menuId
-             , a.prog_idx      AS programId
-             , a.created_at  As createdAt
-             , a.updated_at  As updatedAt
+        SELECT a.prog_idx   As id
+             , a.menu_idx   As menuId
+             , a.prog_idx   AS programId
+             , a.created_at As createdAt
+             , a.updated_at As updatedAt
         FROM menu_link_prog a
         WHERE A.menu_idx = #{menuId}
     </select>
@@ -131,4 +132,13 @@
         WHERE menu_idx = #{menuId}
           AND prog_idx = #{programId}
     </delete>
+
+    <select id="getMenuProg" resultType="com.mes.mes_boot.system.program.dto.ProgMenuDto">
+        SELECT A.menu_idx As menuIdx
+             , A.prog_idx As progIdx
+             , B.name     As progName
+             , B.path     As progPath
+        FROM menu_link_prog A
+                 JOIN programs B ON A.prog_idx = B.id
+    </select>
 </mapper>

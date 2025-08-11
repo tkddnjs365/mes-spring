@@ -4,7 +4,7 @@
 <mapper namespace="com.mes.mes_boot.system.auth.SuperUser.mapper.SuperUserMapper">
     <select id="superUserLogin" resultType="com.mes.mes_boot.system.auth.SuperUser.dto.login.SuperUserDto">
         SELECT id,
-               userid,
+               user_id As userid,
                name,
                role,
                JSON_EXTRACT(permissions, '$') AS permissions

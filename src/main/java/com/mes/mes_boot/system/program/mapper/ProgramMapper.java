@@ -49,4 +49,7 @@ public interface ProgramMapper {
 
     /* 중메뉴 프로그램 연결 해제 */
     int disconnectMenuProgram(Map<String, Object> paramMap);
+
+    /* 메뉴별 연결된 프로그램 전체 조회 */
+    List<ProgMenuDto> getMenuProg();
 }

@@ -9,4 +9,6 @@ public class ProgMenuDto {
     private String progIdx;
     private String progName;
     private String menuName;
+    private String menuIdx;
+    private String progPath;
 }
