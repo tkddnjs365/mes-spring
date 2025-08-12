@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ResponseItemSaveDto {
-    private boolean success;
-    private String error;
-    private String itemIdx;
+    private boolean success;    // 성공 여부
+    private String error;       // 오류 메시지 (실패시)
+    private String itemIdx;     // 품목 인덱스 (성공시)
 }

@@ -47,6 +47,7 @@
         SELECT item_cd
         FROM item_mst
         WHERE item_idx = #{itemIdx}
+          AND company_idx = #{companyIdx}
     </select>
 
     <!-- 품목코드 중복 확인 -->

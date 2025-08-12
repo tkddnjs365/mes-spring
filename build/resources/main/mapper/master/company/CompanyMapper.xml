@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mes.mes_boot.system.master.company.mapper.CompanyMapper">
+
+    <!-- 거래처 조회 -->
+    <select id="getCompanyList" resultType="com.mes.mes_boot.system.master.company.dto.CompanyDto">
+        SELECT A.co_idx As coIdx
+        , A.co_cd As coCd
+        , A.co_nm As coNm
+        , A.use_yn As useYn
+        , A.comp_addr As compAddr
+        , A.comp_type As compType
+        , A.comp_item As compItem
+        , A.comp_curr As compCurr
+        , A.biz_no As bizNo
+        , A.ceo_nm As ceoNm
+        , A.tel As tel
+        , A.fax As fax
+        , A.email As email
+        , A.country As country
+        , A.created_at As createdAt
+        , B.name As createdUser
+        , A.updated_at As updatedAt
+        , B1.name As updatedUser
+
+        , A.comp_type As compTypeIdx
+        , A.comp_item As compItemIdx
+        , A.comp_curr As compCurrIdx
+        , A.created_user As createdUserIdx
+        , A.updated_user As updatedUserIdx
+        FROM company_mst A
+        JOIN users B ON A.created_user = B.id
+        JOIN users B1 ON A.updated_user = B1.id
+        WHERE 1 = 1
+        <if test="companyIdx != null and companyIdx != ''">
+            AND A.company_idx = #{companyIdx}
+        </if>
+
+        <if test="company != null and company != ''">
+            AND (
+            A.co_nm LIKE CONCAT('%', #{company}, '%')
+            OR A.co_cd LIKE CONCAT('%', #{company}, '%')
+            )
+        </if>
+
+        <if test="useYn != null and useYn != ''">
+            AND A.use_yn = #{useYn}
+        </if>
+    </select>
+
+    <!-- 거래처코드 조회 -->
+    <select id="getCompCd" resultType="string">
+        SELECT co_cd
+        FROM company_mst
+        WHERE co_idx = #{coIdx}
+          AND company_idx = #{companyIdx}
+    </select>
+
+    <!-- 거래처코드 중복 확인 -->
+    <select id="checkDuplicateCompCode" resultType="int">
+        SELECT COUNT(*)
+        FROM company_mst
+        WHERE company_idx = #{companyIdx}
+          AND co_cd = #{coCd}
+    </select>
+
+    <!-- 다음 co_idx 조회 -->
+    <select id="getNextCoIdx" resultType="java.lang.Integer">
+        SELECT COALESCE(MAX(co_idx), 0) + 1
+        FROM company_mst
+    </select>
+
+    <!-- 거래처 등록 -->
+    <insert id="insertCompany">
+        INSERT INTO company_mst ( co_idx, company_idx, co_cd, co_nm, use_yn, comp_addr, comp_type, comp_item, comp_curr
+                                , biz_no, ceo_nm, tel
+                                , fax, email, country, created_at, created_user, updated_at, updated_user)
+        SELECT #{coIdx},
+               #{companyIdx},
+               #{coCd},
+               #{coNm},
+               #{useYn},
+               #{compAddr},
+               #{compType},
+               #{compItem},
+               #{compCurr},
+               #{bizNo},
+               #{ceoNm},
+               #{tel},
+               #{fax},
+               #{email},
+               #{country},
+               NOW(),
+               #{userIdx},
+               NOW(),
+               #{userIdx}
+    </insert>
+
+    <!-- 거래처 수정 -->
+    <update id="updateCompany">
+        UPDATE company_mst
+        SET co_cd        = #{coCd},
+            co_nm        = #{coNm},
+            use_yn       = #{useYn},
+            comp_addr    = #{compAddr},
+            comp_type    = #{compType},
+            comp_item    = #{compItem},
+            comp_curr    = #{compCurr},
+            biz_no       = #{bizNo},
+            ceo_nm       = #{ceoNm},
+            tel          = #{tel},
+            fax          = #{fax},
+            email        = #{email},
+            country      = #{country},
+            updated_user = #{userIdx},
+            updated_at   = NOW()
+        WHERE co_idx = #{coIdx}
+          AND company_idx = #{companyIdx}
+    </update>
+</mapper>
