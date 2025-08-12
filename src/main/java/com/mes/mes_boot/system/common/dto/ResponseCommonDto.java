@@ -1,6 +1,5 @@
 package com.mes.mes_boot.system.common.dto;
 
-import com.mes.mes_boot.system.company.dto.CompanyDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

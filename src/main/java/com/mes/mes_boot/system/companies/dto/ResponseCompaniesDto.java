@@ -1,4 +1,4 @@
-package com.mes.mes_boot.system.company.dto;
+package com.mes.mes_boot.system.companies.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,8 +11,8 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ResponseCompanyDto {
+public class ResponseCompaniesDto {
     private boolean success;
     private String message;
-    private List<CompanyDto> companies;
+    private List<CompaniesDto> companies;
 }

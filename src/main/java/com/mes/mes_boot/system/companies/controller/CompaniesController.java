@@ -1,9 +1,9 @@
-package com.mes.mes_boot.system.company.controller;
+package com.mes.mes_boot.system.companies.controller;
 
-import com.mes.mes_boot.system.company.dto.CompanyDto;
-import com.mes.mes_boot.system.company.dto.RequestCompanyDto;
-import com.mes.mes_boot.system.company.dto.ResponseCompanyDto;
-import com.mes.mes_boot.system.company.service.CompanyService;
+import com.mes.mes_boot.system.companies.dto.CompaniesDto;
+import com.mes.mes_boot.system.companies.dto.RequestCompaniesDto;
+import com.mes.mes_boot.system.companies.dto.ResponseCompaniesDto;
+import com.mes.mes_boot.system.companies.service.CompaniesService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -18,18 +18,18 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/company")
 @Tag(name = "Company", description = "회사 관련 API")
-public class CompanyController {
-    private final CompanyService companyService;
+public class CompaniesController {
+    private final CompaniesService companiesService;
 
     /* 회사목록 전체 조회 */
     @GetMapping("/{type}") // Type [ admin : 관리자용 회사코드 ]
     @Operation(summary = "회사목록 전체조회", description = "회사목록 전체조회 합니다")
-    public ResponseEntity<ResponseCompanyDto> getCompanyAll(@PathVariable String type) {
-        List<CompanyDto> re_dto = companyService.getCompanyAll(type);
+    public ResponseEntity<ResponseCompaniesDto> getCompanyAll(@PathVariable String type) {
+        List<CompaniesDto> re_dto = companiesService.getCompanyAll(type);
 
         if (re_dto == null) {
             return ResponseEntity.status(500).body(
-                    ResponseCompanyDto.builder()
+                    ResponseCompaniesDto.builder()
                             .success(false)
                             .message("서버 오류")
                             .companies(null)
@@ -37,7 +37,7 @@ public class CompanyController {
             );
         }
 
-        ResponseCompanyDto response = ResponseCompanyDto.builder()
+        ResponseCompaniesDto response = ResponseCompaniesDto.builder()
                 .success(true)
                 .message("성공")
                 .companies(re_dto)
@@ -49,12 +49,12 @@ public class CompanyController {
     /* 회사목록 조회 */
     @PostMapping("/select")
     @Operation(summary = "회사조회_회사코드", description = "회사코드로 회사를 조회")
-    public ResponseEntity<ResponseCompanyDto> getCompany(@RequestBody RequestCompanyDto request) {
-        List<CompanyDto> re_dto = companyService.getCompany(request);
+    public ResponseEntity<ResponseCompaniesDto> getCompany(@RequestBody RequestCompaniesDto request) {
+        List<CompaniesDto> re_dto = companiesService.getCompany(request);
 
         if (re_dto == null) {
             return ResponseEntity.status(500).body(
-                    ResponseCompanyDto.builder()
+                    ResponseCompaniesDto.builder()
                             .success(false)
                             .message("서버 오류")
                             .companies(null)
@@ -62,7 +62,7 @@ public class CompanyController {
             );
         }
 
-        ResponseCompanyDto response = ResponseCompanyDto.builder()
+        ResponseCompaniesDto response = ResponseCompaniesDto.builder()
                 .success(true)
                 .message("성공")
                 .companies(re_dto)

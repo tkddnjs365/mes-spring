@@ -1,8 +1,8 @@
-package com.mes.mes_boot.system.company.service;
+package com.mes.mes_boot.system.companies.service;
 
-import com.mes.mes_boot.system.company.dto.CompanyDto;
-import com.mes.mes_boot.system.company.dto.RequestCompanyDto;
-import com.mes.mes_boot.system.company.mapper.CompanyMapper;
+import com.mes.mes_boot.system.companies.dto.CompaniesDto;
+import com.mes.mes_boot.system.companies.dto.RequestCompaniesDto;
+import com.mes.mes_boot.system.companies.mapper.CompaniesMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,35 +11,35 @@ import java.util.List;
 import java.util.Map;
 
 @Service // 이 클래스가 서비스 계층임을 Spring에 알림 (비즈니스 로직 처리)
-public class CompanyService {
-    private final CompanyMapper companyMapper;
+public class CompaniesService {
+    private final CompaniesMapper companiesMapper;
     Map<String, Object> paramMap = new HashMap<>();
 
     @Autowired
-    public CompanyService(CompanyMapper companyMapper) {
-        this.companyMapper = companyMapper;
+    public CompaniesService(CompaniesMapper companiesMapper) {
+        this.companiesMapper = companiesMapper;
     }
 
     /* 전체 조회 */
-    public List<CompanyDto> getCompanyAll(String type) {
+    public List<CompaniesDto> getCompanyAll(String type) {
         try {
             paramMap = new HashMap<>();
             paramMap.put("type", type);
 
-            return companyMapper.companySelectAll(paramMap);
+            return companiesMapper.companySelectAll(paramMap);
         } catch (Exception e) {
             return null;
         }
     }
 
     /* 일반 조회 */
-    public List<CompanyDto> getCompany(RequestCompanyDto request) {
+    public List<CompaniesDto> getCompany(RequestCompaniesDto request) {
         try {
             paramMap = new HashMap<>();
             paramMap.put("company_idx", request.getCompany_idx());
             paramMap.put("company_code", request.getCompany_code());
 
-            return companyMapper.companySelect(paramMap);
+            return companiesMapper.companySelect(paramMap);
         } catch (Exception e) {
             return null;
         }

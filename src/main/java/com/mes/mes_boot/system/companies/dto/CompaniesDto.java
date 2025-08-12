@@ -1,11 +1,11 @@
-package com.mes.mes_boot.system.company.dto;
+package com.mes.mes_boot.system.companies.dto;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class CompanyDto {
+public class CompaniesDto {
     private String id;
     private String code;
     private String name;

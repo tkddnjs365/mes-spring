@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.mes.mes_boot.system.company.mapper.CompanyMapper">
-    <select id="companySelectAll" resultType="com.mes.mes_boot.system.company.dto.CompanyDto">
+<mapper namespace="com.mes.mes_boot.system.companies.mapper.CompaniesMapper">
+    <select id="companySelectAll" resultType="com.mes.mes_boot.system.companies.dto.CompaniesDto">
         SELECT id
              , code
              , name
@@ -14,7 +14,7 @@
         WHERE type = #{type}
     </select>
 
-    <select id="companySelect" resultType="com.mes.mes_boot.system.company.dto.CompanyDto">
+    <select id="companySelect" resultType="com.mes.mes_boot.system.companies.dto.CompaniesDto">
         SELECT id
         , code
         , name
