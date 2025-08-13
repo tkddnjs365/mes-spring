@@ -24,8 +24,6 @@
         , A.updated_at As updatedAt
         , B1.name As updatedUser
 
-        , A.comp_type As compTypeIdx
-        , A.comp_item As compItemIdx
         , A.comp_curr As compCurrIdx
         , A.created_user As createdUserIdx
         , A.updated_user As updatedUserIdx

@@ -25,8 +25,6 @@ public class CompanyDto {
     private String updatedAt;
     private String updatedUser;
 
-    private String compTypeIdx;
-    private String compItemIdx;
     private String compCurrIdx;
     private String createdUserIdx;
     private String updatedUserIdx;
