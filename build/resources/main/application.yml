@@ -33,8 +33,3 @@ springdoc:
     path: /api-docs # OpenAPI 문서 경로
   swagger-ui:
     path: /swagger-ui.html # Swagger UI 경로
-
-# Swagger 자동 열기 설정
-swagger:
-  auto-open:
-    enabled: false # false로 설정하면 자동 열기 비활성화

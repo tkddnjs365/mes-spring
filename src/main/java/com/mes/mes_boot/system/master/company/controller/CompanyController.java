@@ -40,8 +40,8 @@ public class CompanyController {
         return ResponseEntity.status(isSuccess ? 200 : 500).body(response);
     }
 
-    /* 품목 저장 */
-    @PostMapping("/itemSave")
+    /* 거래처 저장 */
+    @PostMapping("/companySave")
     @Operation(summary = "품목 저장", description = "품목 저장 (신규/수정)")
     public ResponseEntity<ResponseCompanySaveDto> saveItem(@RequestBody RequestCompanySaveDto request) {
         ResponseCompanySaveDto response = companyService.saveCompany(request);

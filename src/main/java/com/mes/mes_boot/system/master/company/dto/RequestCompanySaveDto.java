@@ -25,4 +25,5 @@ public class RequestCompanySaveDto {
     private String email;
     private String country;
     private String userIdx;
+    private String[] coType;
 }

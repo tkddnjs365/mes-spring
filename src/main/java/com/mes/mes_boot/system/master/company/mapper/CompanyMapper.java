@@ -25,4 +25,13 @@ public interface CompanyMapper {
 
     /* 거래처 수정 */
     int updateCompany(Map<String, Object> paramMap);
+
+    /* 거래처 유형 조회 */
+    List<String> getCompanyCoType(String coIdx);
+
+    /* 거래처 유형 삭제 */
+    int deleteCompanyCoType(String coIdx);
+
+    /* 거래처 유형 저장 */
+    int insertCompanyCoType(Map<String, Object> paramMap);
 }

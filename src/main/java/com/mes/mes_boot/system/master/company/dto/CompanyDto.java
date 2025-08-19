@@ -28,4 +28,6 @@ public class CompanyDto {
     private String compCurrIdx;
     private String createdUserIdx;
     private String updatedUserIdx;
+
+    private String[] coType;
 }

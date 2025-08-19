@@ -31,6 +31,9 @@
         JOIN users B ON A.created_user = B.id
         JOIN users B1 ON A.updated_user = B1.id
         WHERE 1 = 1
+        <if test="coIdx != null and coIdx != ''">
+            AND A.co_idx = #{coIdx}
+        </if>
         <if test="companyIdx != null and companyIdx != ''">
             AND A.company_idx = #{companyIdx}
         </if>
@@ -116,4 +119,23 @@
         WHERE co_idx = #{coIdx}
           AND company_idx = #{companyIdx}
     </update>
+
+    <!-- 거래처 유형 조회 -->
+    <select id="getCompanyCoType" resultType="string">
+        SELECT value
+        FROM company_cotype
+        WHERE co_idx = #{coIdx}
+    </select>
+
+    <!-- 거래처 유형 삭제 -->
+    <delete id="deleteCompanyCoType">
+        DELETE FROM company_cotype
+        WHERE co_idx = #{coIdx}
+    </delete>
+
+    <!-- 거래처 유형 저장 -->
+    <insert id="insertCompanyCoType">
+        INSERT INTO company_cotype (co_idx, value)
+        VALUES (#{coIdx}, #{value})
+    </insert>
 </mapper>
