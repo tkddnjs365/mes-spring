@@ -11,4 +11,5 @@ public class MenuProgDto {
     private String programId;
     private String createdAt;
     private String updatedAt;
+    private String sortOrder;
 }
