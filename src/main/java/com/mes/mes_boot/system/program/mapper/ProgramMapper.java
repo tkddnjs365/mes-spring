@@ -52,4 +52,7 @@ public interface ProgramMapper {
 
     /* 메뉴별 연결된 프로그램 전체 조회 */
     List<ProgMenuDto> getMenuProg();
+
+    /* 메뉴 프로그램 정렬순서 업데이트 */
+    int updateMenuProgOrder(Map<String, Object> paramMap);
 }

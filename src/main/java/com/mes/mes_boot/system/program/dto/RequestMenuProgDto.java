@@ -11,4 +11,5 @@ import lombok.NoArgsConstructor;
 public class RequestMenuProgDto {
     private String menuId;
     private String programId;
+    private String order;
 }

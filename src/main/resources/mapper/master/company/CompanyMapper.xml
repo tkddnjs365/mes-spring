@@ -12,28 +12,32 @@
         , A.comp_addr As compAddr
         , A.comp_type As compType
         , A.comp_item As compItem
-        , A.comp_curr As compCurr
+        , C.value As compCurr
         , A.biz_no As bizNo
         , A.ceo_nm As ceoNm
         , A.tel As tel
         , A.fax As fax
         , A.email As email
-        , A.country As country
+        , C1.value As country
         , A.created_at As createdAt
         , B.name As createdUser
         , A.updated_at As updatedAt
         , B1.name As updatedUser
 
         , A.comp_curr As compCurrIdx
+        , A.country As compCurrIdx
         , A.created_user As createdUserIdx
         , A.updated_user As updatedUserIdx
         FROM company_mst A
         JOIN users B ON A.created_user = B.id
         JOIN users B1 ON A.updated_user = B1.id
+        LEFT JOIN common_code C ON A.comp_curr = C.data_id
+        LEFT JOIN common_code C1 ON A.country = C1.data_id
         WHERE 1 = 1
         <if test="coIdx != null and coIdx != ''">
             AND A.co_idx = #{coIdx}
         </if>
+
         <if test="companyIdx != null and companyIdx != ''">
             AND A.company_idx = #{companyIdx}
         </if>
@@ -129,7 +133,8 @@
 
     <!-- 거래처 유형 삭제 -->
     <delete id="deleteCompanyCoType">
-        DELETE FROM company_cotype
+        DELETE
+        FROM company_cotype
         WHERE co_idx = #{coIdx}
     </delete>
 

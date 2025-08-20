@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 프로그램 및 메뉴 관리 컨트롤러
@@ -201,5 +202,19 @@ public class ProgramController {
     public ResponseEntity<ApiResponse<List<ProgMenuDto>>> getMenuProg() {
         List<ProgMenuDto> result = programService.getMenuProg();
         return ResponseEntity.ok(ApiResponse.success(result));
+    }
+
+    /**
+     * 메뉴 프로그램 정렬순서 업데이트
+     *
+     * @param request 정렬순서 업데이트 요청 정보
+     * @return 업데이트 결과
+     */
+    @PutMapping("/updateMenuProgOrder")
+    @Operation(summary = "메뉴 프로그램 정렬순서 업데이트", description = "메뉴 프로그램 정렬순서 업데이트")
+    public ResponseEntity<ApiResponse<Boolean>> updateMenuProgOrder(@RequestBody RequestMenuProgDto request) {
+
+        boolean result = programService.updateMenuProgOrder(request);
+        return ResponseEntity.ok(ApiResponse.success("정렬순서가 성공적으로 업데이트되었습니다.", result));
     }
 }

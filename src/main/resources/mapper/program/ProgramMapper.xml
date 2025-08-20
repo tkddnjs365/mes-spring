@@ -134,11 +134,20 @@
     </delete>
 
     <select id="getMenuProg" resultType="com.mes.mes_boot.system.program.dto.ProgMenuDto">
-        SELECT A.menu_idx As menuIdx
-             , A.prog_idx As progIdx
-             , B.name     As progName
-             , B.path     As progPath
+        SELECT A.menu_idx  As menuIdx
+             , A.prog_idx  As progIdx
+             , B.name      As progName
+             , B.path      As progPath
+             , C.sortorder As menuOrder
         FROM menu_link_prog A
                  JOIN programs B ON A.prog_idx = B.id
+                 JOIN menus C ON A.menu_idx = C.id
     </select>
+
+    <update id="updateMenuProgOrder" parameterType="map">
+        UPDATE menu_link_prog
+        SET sort_order = #{order}
+        WHERE menu_idx = #{menuId}
+          AND prog_idx = #{programId}
+    </update>
 </mapper>

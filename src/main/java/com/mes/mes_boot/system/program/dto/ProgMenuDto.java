@@ -11,4 +11,5 @@ public class ProgMenuDto {
     private String menuName;
     private String menuIdx;
     private String progPath;
+    private String menuOrder;
 }

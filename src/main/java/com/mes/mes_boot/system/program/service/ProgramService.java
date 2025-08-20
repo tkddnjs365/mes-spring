@@ -205,4 +205,19 @@ public class ProgramService {
             return null;
         }
     }
+
+    /* 메뉴 프로그램 정렬순서 업데이트 */
+    public boolean updateMenuProgOrder(RequestMenuProgDto request) {
+        try {
+            paramMap = new HashMap<>();
+            paramMap.put("menuId", request.getMenuId());
+            paramMap.put("programId", request.getProgramId());
+            paramMap.put("order", request.getOrder());
+
+            int result = programMapper.updateMenuProgOrder(paramMap);
+            return result > 0;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }
