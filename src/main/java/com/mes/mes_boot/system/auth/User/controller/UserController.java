@@ -1,9 +1,9 @@
 package com.mes.mes_boot.system.auth.User.controller;
 
 import com.mes.mes_boot.system.auth.User.dto.RequestUserDto;
-import com.mes.mes_boot.system.auth.User.dto.ResponseUserDto;
 import com.mes.mes_boot.system.auth.User.dto.UserDto;
 import com.mes.mes_boot.system.auth.User.service.UserService;
+import com.mes.mes_boot.util.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -17,6 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 유저 인증 관련 컨트롤러
+ * 로그인, 회원가입 등 사용자 인증 기능을 처리
+ */
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/user")
@@ -24,30 +29,28 @@ import java.util.Map;
 public class UserController {
     private final UserService userService;
 
-    /* 유저 로그인 */
+    /**
+     * 유저 로그인
+     *
+     * @param request 로그인 요청 정보 (사용자 ID, 비밀번호)
+     * @return 로그인 결과 및 사용자 정보
+     */
     @PostMapping("/login")
     @Operation(summary = "유저 로그인", description = "유저 로그인을 처리합니다")
-    public ResponseEntity<ResponseUserDto> userLogin(@Valid @RequestBody RequestUserDto request) {
+    public ResponseEntity<ApiResponse<UserDto>> userLogin(@Valid @RequestBody RequestUserDto request) {
 
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("userId", request.getUserId().trim());
         paramMap.put("password", request.getPassword());
 
-        UserDto User = userService.login(paramMap);
+        UserDto user = userService.login(paramMap);
 
-        if (User == null) {
-            return ResponseEntity.status(401).build(); // Unauthorized
+        if (user == null) {
+            return ResponseEntity.status(401)
+                    .body(ApiResponse.error("로그인 실패: 아이디 또는 비밀번호를 확인해주세요.!"));
         }
 
-        // 로그인 성공 응답
-        ResponseUserDto response = ResponseUserDto.builder()
-                .success(true)
-                .message("로그인 성공")
-                .accessToken("") // JWT 토큰 생성 로직 추가 필요
-                .refreshToken("") // Refresh 토큰 생성 로직 추가 필요
-                .user(User)
-                .build();
-
-        return ResponseEntity.ok(response);
+        // TODO: JWT 토큰 생성 로직 추가 필요
+        return ResponseEntity.ok(ApiResponse.success("로그인 성공", user));
     }
 }

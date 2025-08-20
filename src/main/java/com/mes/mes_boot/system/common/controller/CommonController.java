@@ -3,18 +3,18 @@ package com.mes.mes_boot.system.common.controller;
 import com.mes.mes_boot.system.common.dto.CommonDto;
 import com.mes.mes_boot.system.common.dto.RequestCommonDto;
 import com.mes.mes_boot.system.common.dto.RequestCommonSaveDto;
-import com.mes.mes_boot.system.common.dto.ResponseCommonDto;
 import com.mes.mes_boot.system.common.service.CommonService;
+import com.mes.mes_boot.util.ApiResponse;
+import com.mes.mes_boot.validation.ValidationGroups;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @RestController
@@ -24,120 +24,68 @@ import java.util.Map;
 public class CommonController {
     private final CommonService commonService;
 
+    /**
+     * 회사별 공통데이터 그룹별 데이터 조회
+     *
+     * @param request 조회 조건
+     * @return 그룹별 공통 데이터 목록
+     */
     @PostMapping("/groupDtlSelect")
     @Operation(summary = "회사별 공통데이터 그룹별 데이터 조회", description = "회사별 공통데이터 그룹별 데이터 조회")
-    public ResponseEntity<ResponseCommonDto> getCompGroupDtl(@RequestBody RequestCommonDto request) {
-        List<CommonDto> re_dto = commonService.getCompGroupDtl(request);
-
-        boolean isSuccess = re_dto != null;
-        String message = isSuccess ? "성공" : "서버 오류";
-
-        ResponseCommonDto response = ResponseCommonDto.builder()
-                .success(isSuccess)
-                .message(message)
-                .common(re_dto)
-                .build();
-
-        return ResponseEntity.status(isSuccess ? 200 : 500).body(response);
+    public ResponseEntity<ApiResponse<List<CommonDto>>> getCompGroupDtl(@RequestBody RequestCommonDto request) {
+        List<CommonDto> result = commonService.getCompGroupDtl(request);
+        return ResponseEntity.ok(ApiResponse.success(result));
     }
 
-    /* 공통 데이터 조회 */
+    /**
+     * 공통 데이터 조회
+     *
+     * @param request 조회 조건
+     * @return 공통 데이터 목록
+     */
     @PostMapping("/select")
     @Operation(summary = "공통데이터 조회", description = "공통데이터 조회")
-    public ResponseEntity<ResponseCommonDto> getCommon(@RequestBody RequestCommonDto request) {
-        List<CommonDto> re_dto = commonService.getCommon(request);
-
-        if (re_dto == null) {
-            return ResponseEntity.status(500).body(
-                    ResponseCommonDto.builder()
-                            .success(false)
-                            .message("서버 오류")
-                            .common(null)
-                            .build()
-            );
-        }
-
-        ResponseCommonDto response = ResponseCommonDto.builder()
-                .success(true)
-                .message("성공")
-                .common(re_dto)
-                .build();
-
-        return ResponseEntity.ok(response);
+    public ResponseEntity<ApiResponse<List<CommonDto>>> getCommon(@RequestBody RequestCommonDto request) {
+        List<CommonDto> result = commonService.getCommon(request);
+        return ResponseEntity.ok(ApiResponse.success(result));
     }
 
-    /* 공통 코드 생성 */
+    /**
+     * 공통 코드 생성
+     *
+     * @param request 생성할 공통 코드 정보
+     * @return 생성 결과
+     */
     @PostMapping("/insertCommon")
-    public ResponseEntity<Map<String, Object>> insertCommon(@RequestBody RequestCommonSaveDto request) {
-        try {
-            boolean result = commonService.insertCommon(request);
-
-            Map<String, Object> response = new HashMap<>();
-            if (result) {
-                response.put("success", true);
-                response.put("message", "성공");
-                return ResponseEntity.ok(response);
-            } else {
-                response.put("success", false);
-                response.put("message", "실패");
-                return ResponseEntity.badRequest().body(response);
-            }
-
-        } catch (Exception e) {
-            Map<String, Object> errorResponse = new HashMap<>();
-            errorResponse.put("success", false);
-            errorResponse.put("message", "서버 오류가 발생했습니다.");
-            return ResponseEntity.status(500).body(errorResponse);
-        }
+    @Operation(summary = "공통 코드 생성", description = "새로운 공통 코드를 생성합니다")
+    public ResponseEntity<ApiResponse<Boolean>> insertCommon(@RequestBody @Validated(ValidationGroups.Create.class) RequestCommonSaveDto request) {
+        boolean result = commonService.insertCommon(request);
+        return ResponseEntity.ok(ApiResponse.success("공통 코드가 생성되었습니다.", result));
     }
 
-    /* 공통 코드 삭제 */
+    /**
+     * 공통 코드 삭제
+     *
+     * @param request 삭제할 공통 코드 정보
+     * @return 삭제 결과
+     */
     @DeleteMapping("/deleteCommon")
-    public ResponseEntity<Map<String, Object>> deleteCommon(@RequestBody RequestCommonSaveDto request) {
-        try {
-            boolean result = commonService.deleteCommon(request);
-
-            Map<String, Object> response = new HashMap<>();
-            if (result) {
-                response.put("success", true);
-                response.put("message", "성공");
-                return ResponseEntity.ok(response);
-            } else {
-                response.put("success", false);
-                response.put("message", "실패");
-                return ResponseEntity.badRequest().body(response);
-            }
-
-        } catch (Exception e) {
-            Map<String, Object> errorResponse = new HashMap<>();
-            errorResponse.put("success", false);
-            errorResponse.put("message", "서버 오류가 발생했습니다.");
-            return ResponseEntity.status(500).body(errorResponse);
-        }
+    @Operation(summary = "공통 코드 삭제", description = "기존 공통 코드를 삭제합니다")
+    public ResponseEntity<ApiResponse<Boolean>> deleteCommon(@RequestBody @Validated(ValidationGroups.Delete.class) RequestCommonSaveDto request) {
+        boolean result = commonService.deleteCommon(request);
+        return ResponseEntity.ok(ApiResponse.success("공통 코드가 삭제되었습니다.", result));
     }
 
-    /* 공통 코드 수정 */
+    /**
+     * 공통 코드 수정
+     *
+     * @param request 수정할 공통 코드 정보
+     * @return 수정 결과
+     */
     @PutMapping("/updateCommon")
-    public ResponseEntity<Map<String, Object>> updateCommon(@RequestBody RequestCommonSaveDto request) {
-        try {
-            boolean result = commonService.updateCommon(request);
-
-            Map<String, Object> response = new HashMap<>();
-            if (result) {
-                response.put("success", true);
-                response.put("message", "성공");
-                return ResponseEntity.ok(response);
-            } else {
-                response.put("success", false);
-                response.put("message", "실패");
-                return ResponseEntity.badRequest().body(response);
-            }
-
-        } catch (Exception e) {
-            Map<String, Object> errorResponse = new HashMap<>();
-            errorResponse.put("success", false);
-            errorResponse.put("message", "서버 오류가 발생했습니다.");
-            return ResponseEntity.status(500).body(errorResponse);
-        }
+    @Operation(summary = "공통 코드 수정", description = "기존 공통 코드 정보를 수정합니다")
+    public ResponseEntity<ApiResponse<Boolean>> updateCommon(@RequestBody @Validated(ValidationGroups.Update.class) RequestCommonSaveDto request) {
+        boolean result = commonService.updateCommon(request);
+        return ResponseEntity.ok(ApiResponse.success("공통 코드가 수정되었습니다.", result));
     }
 }

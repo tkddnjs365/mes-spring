@@ -1,7 +1,11 @@
 package com.mes.mes_boot.system.master.item.controller;
 
-import com.mes.mes_boot.system.master.item.dto.*;
+import com.mes.mes_boot.system.master.item.dto.ItemDto;
+import com.mes.mes_boot.system.master.item.dto.RequestItemDto;
+import com.mes.mes_boot.system.master.item.dto.RequestItemSaveDto;
+import com.mes.mes_boot.system.master.item.dto.ResponseItemSaveDto;
 import com.mes.mes_boot.system.master.item.service.ItemService;
+import com.mes.mes_boot.util.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * 품목 관리 컨트롤러
+ * 품목의 조회, 등록, 수정 기능을 제공
+ */
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -22,30 +31,34 @@ import java.util.List;
 public class ItemController {
     private final ItemService itemService;
 
-    /* 품목 조회 */
+    /**
+     * 품목 조회
+     *
+     * @param request 품목 조회 조건
+     * @return 품목 목록
+     */
     @PostMapping("/itemSelect")
     @Operation(summary = "품목 조회", description = "품목 조회")
-    public ResponseEntity<ResponseItemDto> getItemList(@RequestBody RequestItemDto request) {
-        List<ItemDto> re_dto = itemService.getItemList(request);
-
-        boolean isSuccess = re_dto != null;
-        String message = isSuccess ? "성공" : "서버 오류";
-
-        ResponseItemDto response = ResponseItemDto.builder()
-                .success(isSuccess)
-                .message(message)
-                .itemList(re_dto)
-                .build();
-
-        return ResponseEntity.status(isSuccess ? 200 : 500).body(response);
+    public ResponseEntity<ApiResponse<List<ItemDto>>> getItemList(@RequestBody RequestItemDto request) {
+        List<ItemDto> result = itemService.getItemList(request);
+        return ResponseEntity.ok(ApiResponse.success(result));
     }
 
-    /* 품목 저장 */
+    /**
+     * 품목 저장 (신규/수정)
+     *
+     * @param request 저장할 품목 정보
+     * @return 저장 결과
+     */
     @PostMapping("/itemSave")
     @Operation(summary = "품목 저장", description = "품목 저장 (신규/수정)")
-    public ResponseEntity<ResponseItemSaveDto> saveItem(@RequestBody RequestItemSaveDto request) {
-        ResponseItemSaveDto response = itemService.saveItem(request);
+    public ResponseEntity<ApiResponse<Boolean>> saveItem(@RequestBody RequestItemSaveDto request) {
+        ResponseItemSaveDto serviceResponse = itemService.saveItem(request);
 
-        return ResponseEntity.status(response.isSuccess() ? 200 : 400).body(response);
+        if (serviceResponse.isSuccess()) {
+            return ResponseEntity.ok(ApiResponse.success("품목이 성공적으로 저장되었습니다.", true));
+        } else {
+            return ResponseEntity.badRequest().body(ApiResponse.error(serviceResponse.getError()));
+        }
     }
 }

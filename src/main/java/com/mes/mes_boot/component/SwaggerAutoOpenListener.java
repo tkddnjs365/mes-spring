@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
-@Component // Spring 컴포넌트로 등록
+// 계속 자동 실행되서 주석함//@Component // Spring 컴포넌트로 등록
 // ApplicationListener<ApplicationReadyEvent>를 구현해서
 // 애플리케이션이 완전히 준비되었을 때 이벤트를 받을 수 있음
 public class SwaggerAutoOpenListener implements ApplicationListener<ApplicationReadyEvent> {
