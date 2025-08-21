@@ -16,4 +16,15 @@
         WHERE user_id = #{userId}
           AND password = SHA2(#{password}, 256)
     </select>
+
+    <!-- 로그인 히스토리 저장 -->
+    <insert id="insertLoginHistory">
+        INSERT INTO user_login_hist (log_idx, ip_addr, login_at, user_idx)
+        VALUES (
+            COALESCE((SELECT MAX(log_idx) + 1 FROM user_login_hist ulh), 1), <!-- log_idx: 기존 최대값 + 1, 없으면 1 -->
+            #{ipAddr},                                                      <!-- 클라이언트 IP 주소 -->
+            NOW(),                                                          <!-- 현재 시간 -->
+            #{userIdx}                                                      <!-- users 테이블의 id -->
+        )
+    </insert>
 </mapper>

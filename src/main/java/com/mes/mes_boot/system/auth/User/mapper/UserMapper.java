@@ -8,4 +8,10 @@ import java.util.Map;
 @Mapper
 public interface UserMapper {
     UserDto userLogin(Map<String, Object> paramMap);
+    
+    /**
+     * 로그인 히스토리 저장
+     * @param paramMap 히스토리 파라미터 (ipAddr, userIdx)
+     */
+    void insertLoginHistory(Map<String, Object> paramMap);
 }
